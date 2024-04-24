@@ -11,7 +11,7 @@ def get_context_prompt(question, context):
         return f'SOURCES: \n{context}\n\nQUESTION: {question}\n\nAnswer:'
 
 
-def ask_llm(marqo_results, question):
+def ask_llm(marqo_results, question, temperature=0.2):
     # Build context using Marqo's highlighting functionality.
     context = ''
     for i, hit in enumerate(marqo_results['hits']):
@@ -28,10 +28,10 @@ def ask_llm(marqo_results, question):
     completion = client.chat.completions.create(
     model=model,
     messages=[
-        {"role": "system", "content": "En te basant sur les éléments contenus dans la section \"SOURCES\" répond à la question posée dans le section \"QUESTION\". Tu indiqueras de quelles sources est basée ta réponse."},
+        {"role": "system", "content": "En te basant sur les éléments contenus dans la section \"SOURCES\" répond à la question posée dans le section \"QUESTION\". Tu indiqueras de quelles sources est basée ta réponse. Tu repondras en français."},
         {"role": "user", "content": prompt}
     ],
-    temperature=0.2,
+    temperature=temperature,
     )
 
     llm=completion.choices[0].message

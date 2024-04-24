@@ -8,10 +8,22 @@ import marqo_helper
 import llm_helper
 
 
+## Set web page settings
+st.set_page_config(
+    page_title="Note what ? 🔍",
+    page_icon=":mag:",
+    layout="centered",
+    menu_items={
+        'Get Help': None,
+        'Report a bug': None,
+        'About': None
+    }
+)
 
 ## Set page title
 st.title('Note what ?')
 
+temperature = st.sidebar.slider('Set temperature', 0.0, 1.0, 0.2, 0.1)
 marqo_helper.create_index()
 
 ## Upload notes file
@@ -44,7 +56,7 @@ if question == "":
     text_space = st.write("Text Search needed")
 else:
     text_space = st.write("Brainstorming in progress...")
-    llm = llm_helper.ask_llm(results, question)
+    llm = llm_helper.ask_llm(results, question, temperature)
     text_space = st.write(llm.content)
 
 
